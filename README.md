@@ -1,4 +1,3 @@
-# financial-strategy-game
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -11,6 +10,7 @@
     button { margin-top: 1em; }
     table, td, th { border: 1px solid #999; border-collapse: collapse; padding: 4px; }
     #cardBox { border: 1px solid #ccc; padding: 1em; margin-top: 1em; }
+    #name, #id { width: 150px; font-size: 1.1em; }
   </style>
 </head>
 <body>
@@ -31,13 +31,13 @@
   <div id="cardBox" class="hidden">
     <h3 id="cardTitle"></h3>
     <p id="cardDesc"></p>
-    <p>請輸入 S/B/X/C/R 加權（合計最多為 5）：</p>
-    <label>S: <input id="inputS" type="number" min="0" max="5" /></label>
-    <label>B: <input id="inputB" type="number" min="0" max="5" /></label>
-    <label>X: <input id="inputX" type="number" min="0" max="5" /></label>
-    <label>C: <input id="inputC" type="number" min="0" max="5" /></label>
-    <label>R: <input id="inputR" type="number" min="0" max="5" /></label><br />
-    <button onclick="confirmTurn()">確定</button>
+    <p>請輸入 S/B/X/C/R 加權（正負數、總合最多為 10）：</p>
+    <label>S: <input id="inputS" type="number" min="-10" max="10" /></label>
+    <label>B: <input id="inputB" type="number" min="-10" max="10" /></label>
+    <label>X: <input id="inputX" type="number" min="-10" max="10" /></label>
+    <label>C: <input id="inputC" type="number" min="-10" max="10" /></label>
+    <label>R: <input id="inputR" type="number" min="-10" max="10" /></label><br />
+    <button id="confirmBtn" onclick="confirmTurn()">確定</button>
   </div>
   <p id="result"></p>
   <p>總分：<span id="totalScore">0</span></p>
@@ -55,7 +55,6 @@
 </div>
 
 <script>
-
 const cards = [
   {
     title: "賓拉登發動九一一復仇恐怖攻擊",
@@ -147,7 +146,6 @@ const cards = [
     description: "1992年8月24日，安德魯颶風打亂美國石油供應鏈佈局，也成為共和黨在1992年總統大選落敗的一根稻草。",
     s: -2, b:  3, x:  5, c:  4, r: -3
   },
-
   {
     title: "新興市場債信暴風圈轉向俄羅斯",
     description: "1998年8月17日，俄羅斯央行在亞洲金融風暴愈演愈烈過程中試圖維繫盧布緊盯美元，加上經濟衰退導致石油需求銳減，最終以債務違約與盧布劇貶收場。",
@@ -223,10 +221,9 @@ const cards = [
     description: "1988年11月30日，私募巨頭 KKR 利用槓桿融資收購納貝斯克，開創企業併購的高槓桿時代。",
     s:  5, b: -4, x: -2, c:  3, r:  4
   },
-
   {
-    title: "消費者視美房市如崩裂中的懸崖",
-    description: "2007年4月13日，美國房市對經濟如即將崩裂的懸崖，加上市場炒作原物料通膨對房貸的壓力重創消費者信心指數，讓經濟陷入無可挽救的惡性循環。",
+    title: "消費者視美房市如崩裂中的悬崖",
+    description: "2007年4月13日，美国房市对经济如即将崩裂的悬崖，加上市场炒作原物料通膨对房贷的压力重创消费者信心指数，让经济陷入无可挽救的恶性循环。",
     s: -4, b:  4, x:  3, c: -4, r: -5
   },
   {
@@ -278,54 +275,8 @@ const cards = [
     title: "福特總統的停滯性通膨政經夢魘",
     description: "1975年2月5日，尼克森下台後接手經濟爛攤的福特總統在1975年初公布1976年度財政預算，已預告對停滯性通膨的洪水猛獸無力回天。",
     s: -5, b: -5, x:  3, c:  2, r: -5
-  },
-
-  {
-    title: "亞洲金融風暴威脅全球金融體系",
-    description: "1997年8月14日，源自泰銖債信的亞洲金融風暴愈演愈烈，席捲整個亞洲貨幣體系，更進一步威脅全球金融體系的穩定，迫使 IMF 出手解救泰國的財政問題。",
-    s: -4, b: -3, x: -5, c: -4, r: -5
-  },
-  {
-    title: "衍生金融之波克夏奇異資本黑洞",
-    description: "2009年3月6日，美國財政部與央行聯手籌備不良資產收購紓困方案，對大型銀行做壓力測試，發現 AIG 紓困背後牽連波克夏與奇異的更大系統性風險黑洞。",
-    s: -5, b:  3, x:  3, c: -5, r: -5
-  },
-  {
-    title: "世界通訊企業假帳潰散投資信心",
-    description: "2002年7月21日，繼安隆之後，第二大美國公司世界通訊爆發假帳風波並宣告史上最大破產案，讓全球投資者對美國企業的信心徹底消散。",
-    s: -5, b:  4, x:  5, c: -3, r: -4
-  },
-  {
-    title: "生技泡沫之基因圖譜資產化爭議",
-    description: "2000年3月14日，美國總統柯林頓與英國首相布萊爾聯合聲明，提議 HGP 人類基因圖譜計畫的研究成果應屬公共資產，並開放後續研發使用。",
-    s: -5, b: -2, x: -3, c:  2, r:  3
-  },
-  {
-    title: "一九八七黑色星期一股市大崩盤",
-    description: "1987年10月19日，三巫日結算後首次全球股市同步崩盤，道瓊狂瀉508點，單日跌幅高達22.6%。",
-    s: -5, b:  5, x: -3, c: -4, r: -5
-  },
-  {
-    title: "蘋果超級盃廣告震撼推出麥金塔",
-    description: "1984年1月22日，蘋果在超級盃轉播中推出震撼廣告，以麥金塔電腦挑戰 IBM 的市場龍頭地位。",
-    s:  5, b: -4, x: -5, c: -2, r: -3
-  },
-  {
-    title: "華爾街日報宣告: 股票市場已死",
-    description: "1974年12月6日，道瓊多次探底下滑，年底《華爾街日報》以「市場已死」為題，形容投資大眾信心完全潰敗。",
-    s:  5, b: -5, x:  3, c:  5, r:  5
-  },
-  {
-    title: "葛林斯潘警告股市之非理性繁榮",
-    description: "1996年12月5日，聯準會主席葛林斯潘在演說中對可能引發資產泡沫的非理性繁榮表達深切憂慮，強調需未雨綢繆。",
-    s: -4, b: -5, x: -3, c: -4, r: -4
   }
 ];
-
-
-
-
-
 let student = {};
 let round = 0;
 let totalScore = 0;
@@ -363,9 +314,9 @@ function confirmTurn() {
   const x = parseFloat(document.getElementById("inputX").value || 0);
   const c = parseFloat(document.getElementById("inputC").value || 0);
   const r = parseFloat(document.getElementById("inputR").value || 0);
-  const totalWeight = s + b + x + c + r;
-  if (totalWeight > 5) {
-    alert("加權總合不能超過 5！");
+  const totalWeightAbs = Math.abs(s) + Math.abs(b) + Math.abs(x) + Math.abs(c) + Math.abs(r);
+  if (totalWeightAbs > 10) {
+    alert("加權總合不能超過 10！");
     return;
   }
 
@@ -405,23 +356,30 @@ function confirmTurn() {
   if (round >= 5) {
     document.getElementById("result").innerText += '（遊戲結束）';
     saveToLocal();
+    // Disable input fields and confirm button after game ends
+    document.getElementById("inputS").disabled = true;
+    document.getElementById("inputB").disabled = true;
+    document.getElementById("inputX").disabled = true;
+    document.getElementById("inputC").disabled = true;
+    document.getElementById("inputR").disabled = true;
+    document.getElementById("confirmBtn").disabled = true;
   } else {
     drawCard();
   }
 }
+
 function saveToLocal() {
   const data = JSON.parse(localStorage.getItem("records") || "[]");
-  const timestamp = new Date().toLocaleString(); // 獲取當前時間
+  const timestamp = new Date().toLocaleString();
   data.push({
     name: student.name,
     id: student.id,
     total: totalScore,
     logs,
-    time: timestamp // 新增紀錄時間
+    time: timestamp
   });
   localStorage.setItem("records", JSON.stringify(data));
 }
-
 
 function restartGame() {
   location.reload();
@@ -467,5 +425,3 @@ function exportCSV() {
 
 </body>
 </html>
-
-
