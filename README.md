@@ -383,7 +383,7 @@ function saveToLocal() {
   localStorage.setItem("records", JSON.stringify(localData));
 
   // 傳送到 Google Sheets
-  fetch("https://script.google.com/macros/s/AKfycbxBXdSdhpplBSj9T0NPlO-0NDwBkREF5nyd323rmQo/dev", {
+  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
