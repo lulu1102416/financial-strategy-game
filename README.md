@@ -368,16 +368,31 @@ function confirmTurn() {
 }
 
 function saveToLocal() {
-  const data = JSON.parse(localStorage.getItem("records") || "[]");
   const timestamp = new Date().toLocaleString();
-  data.push({
+  const record = {
     name: student.name,
     id: student.id,
     total: totalScore,
-    logs,
+    logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
     time: timestamp
+  };
+
+  // 本地儲存（原功能保留）
+  const localData = JSON.parse(localStorage.getItem("records") || "[]");
+  localData.push(record);
+  localStorage.setItem("records", JSON.stringify(localData));
+
+  // 傳送到 Google Sheets（你的 Apps Script 網址）
+  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(record)
+  }).catch((e) => {
+    console.error("送出 Google Sheets 失敗：", e);
   });
-  localStorage.setItem("records", JSON.stringify(data));
 }
 
 function restartGame() {
