@@ -377,23 +377,22 @@ function saveToLocal() {
     time: timestamp
   };
 
-  // 本地儲存（原功能保留）
+  // 儲存到 localStorage
   const localData = JSON.parse(localStorage.getItem("records") || "[]");
   localData.push(record);
   localStorage.setItem("records", JSON.stringify(localData));
 
-  // 傳送到 Google Sheets（你的 Apps Script 網址）
-  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec", {
+  // 傳送到 Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbxBXdSdhpplBSj9T0NPlO-0NDwBkREF5nyd323rmQo/dev", {
     method: "POST",
     mode: "no-cors",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(record)
-  }).catch((e) => {
-    console.error("送出 Google Sheets 失敗：", e);
   });
 }
+
 
 function restartGame() {
   location.reload();
