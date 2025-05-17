@@ -12,7 +12,7 @@
     #name, #id { width: 150px; font-size: 1.1em; }
   </style>
 </head>
-</body>
+<body>
 
 <h1>金融戰略王</h1>
 
@@ -371,13 +371,8 @@ function saveToLocal() {
     time: timestamp
   };
 
-  // 儲存到 localStorage（可選）
-  const localData = JSON.parse(localStorage.getItem("records") || "[]");
-  localData.push(record);
-  localStorage.setItem("records", JSON.stringify(localData));
 
-  // ✅ 傳送到 Google Apps Script Web App（Google Sheets）
-  fetch("https://script.google.com/macros/s/AKfycbxOYkovaJzgUHxSV-jhrQnQqB72sDKePEeZpKRrwj9stCmimYG4OlgkwxJfmhBn35Kd/exec", {
+fetch("https://script.google.com/macros/s/AKfycbxOYkovaJzgUHxSV-jhrQnQqB72sDKePEeZpKRrwj9stCmimYG4OlgkwxJfmhBn35Kd/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -387,9 +382,10 @@ function saveToLocal() {
   });
 }
 
+function restartGame() {
+  location.reload();
+}
 
 </script>
- 
-
 </body>
 </html>
