@@ -53,21 +53,32 @@
   <div id="recordTable"></div>
 </div>
 
-<!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDM6EGkFIqDXRVSHr9GXG_PPV8R3ViI5dQ",
-    authDomain: "financial-strategy-game.firebaseapp.com",
-    projectId: "financial-strategy-game",
-    storageBucket: "financial-strategy-game.appspot.com",
-    messagingSenderId: "13202865051",
-    appId: "1:13202865051:web:d25f5067d1212e51ee3f3e",
-    measurementId: "G-1094R03925"
+function saveToLocal() {
+  const timestamp = new Date().toLocaleString();
+  const record = {
+    name: student.name,
+    id: student.id,
+    total: totalScore,
+    logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
+    time: timestamp
   };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+
+  // 儲存到 localStorage（可選）
+  const localData = JSON.parse(localStorage.getItem("records") || "[]");
+  localData.push(record);
+  localStorage.setItem("records", JSON.stringify(localData));
+
+  // ✅ 傳送到 Google Apps Script Web App（Google Sheets）
+  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec)", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(record)
+  });
+}
+
 
 
 
