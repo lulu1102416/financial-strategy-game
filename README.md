@@ -406,47 +406,6 @@ function confirmTurn() {
 </script>
 
 
-function restartGame() {
-  location.reload();
-}
-
-function showAdmin() {
-  document.getElementById("adminSection").classList.remove("hidden");
-  const data = JSON.parse(localStorage.getItem("records") || "[]");
-  let html = '<table><tr><th>姓名</th><th>學號</th><th>總分</th><th>紀錄時間</th><th>紀錄</th></tr>';
-  for (const rec of data) {
-    html += `<tr>
-      <td>${rec.name}</td>
-      <td>${rec.id}</td>
-      <td>${rec.total}</td>
-      <td>${rec.time || "無紀錄時間"}</td>
-      <td><ul>${rec.logs.map(l => `<li>${l.cardTitle}: ${l.score}分</li>`).join("")}</ul></td>
-    </tr>`;
-  }
-  html += "</table>";
-  document.getElementById("recordTable").innerHTML = html;
-}
-
-function hideAdmin() {
-  document.getElementById("adminSection").classList.add("hidden");
-}
-
-function exportCSV() {
-  const data = JSON.parse(localStorage.getItem("records") || "[]");
-  if (!data.length) return alert("沒有資料");
-  let csv = "姓名,學號,總分,每回合紀錄\\n";
-  for (const rec of data) {
-    const rounds = rec.logs.map(l => `${l.cardTitle}(${l.score})`).join(" / ");
-    csv += `${rec.name},${rec.id},${rec.total},"${rounds}"\\n`;
-  }
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "金融戰略王成績紀錄.csv";
-  a.click();
-}
-</script>
 
 </body>
 </html>
