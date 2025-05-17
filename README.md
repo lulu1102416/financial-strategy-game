@@ -46,7 +46,7 @@
   <button onclick="showAdmin()">老師後台</button>
 </div>
 
-</script>
+<script>
 const cards = [
   {
     title: "賓拉登發動九一一復仇恐怖攻擊",
