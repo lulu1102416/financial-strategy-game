@@ -12,7 +12,7 @@
     #name, #id { width: 150px; font-size: 1.1em; }
   </style>
 </head>
-<body>
+</body>
 
 <h1>金融戰略王</h1>
 
@@ -46,7 +46,7 @@
   <button onclick="showAdmin()">老師後台</button>
 </div>
 
-<script>
+</script>
 const cards = [
   {
     title: "賓拉登發動九一一復仇恐怖攻擊",
