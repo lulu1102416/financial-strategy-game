@@ -46,43 +46,6 @@
   <button onclick="showAdmin()">老師後台</button>
 </div>
 
-<div id="adminSection" class="hidden">
-  <h2>老師後台</h2>
-  <button onclick="exportCSV()">下載 CSV</button>
-  <button onclick="hideAdmin()">返回遊戲畫面</button>
-  <div id="recordTable"></div>
-</div>
-
-function saveToLocal() {
-  const timestamp = new Date().toLocaleString();
-  const record = {
-    name: student.name,
-    id: student.id,
-    total: totalScore,
-    logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
-    time: timestamp
-  };
-
-  // 儲存到 localStorage（可選）
-  const localData = JSON.parse(localStorage.getItem("records") || "[]");
-  localData.push(record);
-  localStorage.setItem("records", JSON.stringify(localData));
-
-  // ✅ 傳送到 Google Apps Script Web App（Google Sheets）
-  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec)", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(record)
-  });
-}
-
-
-
-
-
 <script>
 const cards = [
   {
@@ -397,26 +360,35 @@ function confirmTurn() {
   }
 }
 
+
+function saveToLocal() {
+  const timestamp = new Date().toLocaleString();
+  const record = {
+    name: student.name,
+    id: student.id,
+    total: totalScore,
+    logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
+    time: timestamp
+  };
+
+  // 儲存到 localStorage（可選）
+  const localData = JSON.parse(localStorage.getItem("records") || "[]");
+  localData.push(record);
+  localStorage.setItem("records", JSON.stringify(localData));
+
+  // ✅ 傳送到 Google Apps Script Web App（Google Sheets）
+  fetch("https://script.google.com/macros/s/AKfycbzW98-U-umvV1_nJYaZYlvOV7D7snHJ2pFrsztUm8f8Dcdt5m0lbKYjgPllJYXwlgDW/exec)", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(record)
+  });
+}
+
 <script>
-  function saveToLocal() {
-    const timestamp = new Date().toLocaleString();
-    const record = {
-      name: student.name,
-      id: student.id,
-      total: totalScore,
-      logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`),
-      time: timestamp
-    };
-    db.collection("records").add(record)
-      .then(() => console.log("✅ 已成功寫入 Firebase"))
-      .catch((error) => console.error("❌ Firebase 寫入失敗：", error));
-    const localData = JSON.parse(localStorage.getItem("records") || "[]");
-    localData.push(record);
-    localStorage.setItem("records", JSON.stringify(localData));
-  }
-</script>
-
-
+ 
 
 </body>
 </html>
