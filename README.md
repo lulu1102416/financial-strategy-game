@@ -26,24 +26,78 @@
 <div id="gameSection" class="hidden">
   <p>學生：<span id="studentInfo"></span></p>
   <p>目前回合：<span id="roundCount">1</span> / 5</p>
-  <button onclick="drawCard()">抽卡</button>
+  
   <div id="cardBox" class="hidden">
     <h3 id="cardTitle"></h3>
     <p id="cardDesc"></p>
-    <p>請輸入 S/B/X/C/R 加權（正負數、總合最多為 10）：</p>
-    <label>S: <input id="inputS" type="number" min="-10" max="10" /></label>
-    <label>B: <input id="inputB" type="number" min="-10" max="10" /></label>
-    <label>X: <input id="inputX" type="number" min="-10" max="10" /></label>
-    <label>C: <input id="inputC" type="number" min="-10" max="10" /></label>
-    <label>R: <input id="inputR" type="number" min="-10" max="10" /></label><br />
-    <button id="confirmBtn" onclick="confirmTurn()">確定</button>
+    <p>請輸入 S/B/X/C/R 加權（整數，總合最多為 10）：</p>
+
+<div>
+  <label>S: 
+    <select id="signS"><option value="+">+</option><option value="-">-</option></select>
+    <input id="valS" type="number" min="0" max="10" step="1" />
+  </label>
+</div>
+<div>
+  <label>B: 
+    <select id="signB"><option value="+">+</option><option value="-">-</option></select>
+    <input id="valB" type="number" min="0" max="10" step="1" />
+  </label>
+</div>
+<div>
+  <label>X: 
+    <select id="signX"><option value="+">+</option><option value="-">-</option></select>
+    <input id="valX" type="number" min="0" max="10" step="1" />
+  </label>
+</div>
+<div>
+  <label>C: 
+    <select id="signC"><option value="+">+</option><option value="-">-</option></select>
+    <input id="valC" type="number" min="0" max="10" step="1" />
+  </label>
+</div>
+<div>
+  <label>R: 
+    <select id="signR"><option value="+">+</option><option value="-">-</option></select>
+    <input id="valR" type="number" min="0" max="10" step="1" />
+  </label>
+</div>
+
+<br />
+<button onclick="confirmTurn()">確定</button>
+
+<script>
+function getSignedValue(signId, valId) {
+  const sign = document.getElementById(signId).value;
+  const val = parseInt(document.getElementById(valId).value) || 0;
+  return sign === '-' ? -val : val;
+}
+
+function confirmTurn() {
+  const s = getSignedValue('signS', 'valS');
+  const b = getSignedValue('signB', 'valB');
+  const x = getSignedValue('signX', 'valX');
+  const c = getSignedValue('signC', 'valC');
+  const r = getSignedValue('signR', 'valR');
+  
+  const total = s + b + x + c + r;
+
+  if (Math.abs(total) > 10) {
+    alert("總和絕對值不能超過 10！");
+  } else {
+    alert(`輸入成功！加權值為：S=${s}, B=${b}, X=${x}, C=${c}, R=${r}`);
+    // 這裡可以繼續你的邏輯
+  }
+}
+</script>
+
   </div>
   <p id="result"></p>
   <p>總分：<span id="totalScore">0</span></p>
   <h3>回合紀錄：</h3>
   <ul id="logList"></ul>
   <button onclick="restartGame()">重新開始</button>
-  <button onclick="showAdmin()">老師後台</button>
+  
 </div>
 
 <script>
