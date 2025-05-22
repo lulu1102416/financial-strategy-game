@@ -72,7 +72,7 @@
   <p>總分：<span id="totalScore">0</span></p>
   <h3>回合紀錄：</h3>
   <ul id="logList"></ul>
-
+</div>
 
 <script>
 const cards = [
