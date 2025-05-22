@@ -65,16 +65,14 @@
 
 
 <br />
-<button onclick="confirmTurn()">確定</button>
-
+    <button onclick="confirmTurn()">確定</button>
   </div>
+
   <p id="result"></p>
   <p>總分：<span id="totalScore">0</span></p>
   <h3>回合紀錄：</h3>
   <ul id="logList"></ul>
-  <button onclick="restartGame()">重新開始</button>
-  
-</div>
+
 
 <script>
 const cards = [
