@@ -89,7 +89,7 @@ function confirmTurn() {
     // 這裡可以繼續你的邏輯
   }
 }
-<script>
+</script>
 
   </div>
   <p id="result"></p>
