@@ -63,33 +63,15 @@
   </label>
 </div>
 
+  <p id="result"></p>
+  <p>總分：<span id="totalScore">0</span></p>
+  <h3>回合紀錄：</h3>
+  <ul id="logList"></ul>
+  <button onclick="restartGame()">重新開始</button>
+</div>
+
 <br />
 <button onclick="confirmTurn()">確定</button>
-
-<script>
-function getSignedValue(signId, valId) {
-  const sign = document.getElementById(signId).value;
-  const val = parseInt(document.getElementById(valId).value) || 0;
-  return sign === '-' ? -val : val;
-}
-
-function confirmTurn() {
-  const s = getSignedValue('signS', 'valS');
-  const b = getSignedValue('signB', 'valB');
-  const x = getSignedValue('signX', 'valX');
-  const c = getSignedValue('signC', 'valC');
-  const r = getSignedValue('signR', 'valR');
-  
-  const total = s + b + x + c + r;
-
-  if (Math.abs(total) > 10) {
-    alert("總和絕對值不能超過 10！");
-  } else {
-    alert(`輸入成功！加權值為：S=${s}, B=${b}, X=${x}, C=${c}, R=${r}`);
-    // 這裡可以繼續你的邏輯
-  }
-}
-</script>
 
   </div>
   <p id="result"></p>
@@ -323,6 +305,13 @@ const cards = [
     s: -5, b: -5, x:  3, c:  2, r: -5
   }
 ];
+
+function getSignedValue(signId, valId) {
+  const sign = document.getElementById(signId).value;
+  const val = parseInt(document.getElementById(valId).value) || 0;
+  return sign === '-' ? -val : val;
+}
+
 let student = {};
 let round = 0;
 let totalScore = 0;
@@ -355,65 +344,46 @@ function drawCard() {
 }
 
 function confirmTurn() {
-  const s = parseFloat(document.getElementById("inputS").value || 0);
-  const b = parseFloat(document.getElementById("inputB").value || 0);
-  const x = parseFloat(document.getElementById("inputX").value || 0);
-  const c = parseFloat(document.getElementById("inputC").value || 0);
-  const r = parseFloat(document.getElementById("inputR").value || 0);
+  const s = getSignedValue('signS', 'valS');
+  const b = getSignedValue('signB', 'valB');
+  const x = getSignedValue('signX', 'valX');
+  const c = getSignedValue('signC', 'valC');
+  const r = getSignedValue('signR', 'valR');
+
   const totalWeightAbs = Math.abs(s) + Math.abs(b) + Math.abs(x) + Math.abs(c) + Math.abs(r);
   if (totalWeightAbs > 10) {
     alert("加權總合不能超過 10！");
     return;
   }
 
-  const score =
-    currentCard.s * s +
-    currentCard.b * b +
-    currentCard.x * x +
-    currentCard.c * c +
-    currentCard.r * r;
-
+ const score = currentCard.s * s + currentCard.b * b + currentCard.x * x + currentCard.c * c + currentCard.r * r;
   totalScore += score;
   round += 1;
 
-  logs.push({
-    round,
-    cardTitle: currentCard.title,
-    input: { s, b, x, c, r },
-    base: currentCard,
-    score
-  });
-
+  logs.push({ round, cardTitle: currentCard.title, input: { s, b, x, c, r }, base: currentCard, score });
   document.getElementById("roundCount").innerText = round;
   document.getElementById("totalScore").innerText = totalScore;
   document.getElementById("result").innerText = `第 ${round} 回合得分：${score}`;
-  document.getElementById("logList").innerHTML += `
-    <li>
-      ${currentCard.title}：${score} 分<br />
-      倍數：S(${currentCard.s} * ${s}), B(${currentCard.b} * ${b}), 
-      X(${currentCard.x} * ${x}), C(${currentCard.c} * ${c}), R(${currentCard.r} * ${r})
-    </li>`;
-  document.getElementById("inputS").value =
-    document.getElementById("inputB").value =
-    document.getElementById("inputX").value =
-    document.getElementById("inputC").value =
-    document.getElementById("inputR").value = '';
+  document.getElementById("logList").innerHTML += `<li>${currentCard.title}：${score} 分<br />倍數：S(${currentCard.s} * ${s}), B(${currentCard.b} * ${b}), X(${currentCard.x} * ${x}), C(${currentCard.c} * ${c}), R(${currentCard.r} * ${r})</li>`;
+
+
+['valS','valB','valX','valC','valR'].forEach(id => document.getElementById(id).value = '');
 
   if (round >= 5) {
     document.getElementById("result").innerText += '（遊戲結束）';
     saveToLocal();
-    // Disable input fields and confirm button after game ends
-    document.getElementById("inputS").disabled = true;
-    document.getElementById("inputB").disabled = true;
-    document.getElementById("inputX").disabled = true;
-    document.getElementById("inputC").disabled = true;
-    document.getElementById("inputR").disabled = true;
-    document.getElementById("confirmBtn").disabled = true;
+    ['valS','valB','valX','valC','valR','signS','signB','signX','signC','signR'].forEach(id => {
+      document.getElementById(id).disabled = true;
+    });
+    document.querySelector('button[onclick="confirmTurn()"]')?.setAttribute('disabled', true);
   } else {
     drawCard();
   }
 }
 
+function restartGame() {
+  location.reload();
+}
 
 function saveToLocal() {
   const timestamp = new Date().toLocaleString();
@@ -424,22 +394,14 @@ function saveToLocal() {
     logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
     time: timestamp
   };
-
-
-fetch("https://script.google.com/macros/s/AKfycbxOYkovaJzgUHxSV-jhrQnQqB72sDKePEeZpKRrwj9stCmimYG4OlgkwxJfmhBn35Kd/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxOYkovaJzgUHxSV-jhrQnQqB72sDKePEeZpKRrwj9stCmimYG4OlgkwxJfmhBn35Kd/exec", {
     method: "POST",
     mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(record)
   });
 }
-
-function restartGame() {
-  location.reload();
-}
-
 </script>
+
 </body>
 </html>
