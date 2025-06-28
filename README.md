@@ -323,6 +323,8 @@ function startGame() {
   document.getElementById("gameSection").classList.remove("hidden");
   document.getElementById("studentInfo").innerText = `${name}（${id}）`;
   document.getElementById("logList").innerHTML = '';
+  <p id="finalScore" style="font-weight: bold; color: green;"></p>
+
   document.getElementById("totalScore").innerText = '0';
   document.getElementById("result").innerText = '';
   drawCard();
@@ -365,21 +367,19 @@ function confirmTurn() {
 
 if (round >= 5) {
   const normalized = Math.round(((totalScore + 250) / 500) * 100);
- document.getElementById("finalScore").innerText = `🌟 最終換算分數為 ${normalized} 分（滿分 100）`;
+  document.getElementById("finalScore").innerText = `🌟 最終換算分數為 ${normalized} 分（滿分 100）`;
+  document.getElementById("result").innerText += '（遊戲結束）';
+  saveToLocal();
 
-['valS','valB','valX','valC','valR'].forEach(id => document.getElementById(id).value = '');
-
-  if (round >= 5) {
-    document.getElementById("result").innerText += '（遊戲結束）';
-    saveToLocal();
-    ['valS','valB','valX','valC','valR','signS','signB','signX','signC','signR'].forEach(id => {
-      document.getElementById(id).disabled = true;
-    });
-    document.querySelector('button[onclick="confirmTurn()"]')?.setAttribute('disabled', true);
-  } else {
-    drawCard();
-  }
+  // 鎖定欄位
+  ['valS','valB','valX','valC','valR','signS','signB','signX','signC','signR'].forEach(id => {
+    document.getElementById(id).disabled = true;
+  });
+  document.querySelector('button[onclick="confirmTurn()"]')?.setAttribute('disabled', true);
+} else {
+  drawCard();
 }
+
 
 function restartGame() {
   location.reload();
