@@ -357,11 +357,15 @@ function confirmTurn() {
   document.getElementById("roundCount").innerText = round;
   document.getElementById("totalScore").innerText = totalScore;
   document.getElementById("result").innerText = `第 ${round} 回合得分：${score}`;
-  document.getElementById("logList").innerHTML += `<li>${currentCard.title}：${score} 分<br />倍數：S(${currentCard.s} * ${s}), B(${currentCard.b} * ${b}), X(${currentCard.x} * ${x}), C(${currentCard.c} * ${c}), R(${currentCard.r} * ${r})</li>`;
+
+ document.getElementById("logList").innerHTML += `
+  <li>${currentCard.title}：${score} 分<br />
+  倍數：S(${currentCard.s} * ${s}), B(${currentCard.b} * ${b}), X(${currentCard.x} * ${x}), C(${currentCard.c} * ${c}), R(${currentCard.r} * ${r})</li>`;
+
 
 if (round >= 5) {
   const normalized = Math.round(((totalScore + 250) / 500) * 100);
-  document.getElementById("finalScore").innerText = `🌟 最終換算分數為 ${normalized} 分（滿分 100）`;
+ document.getElementById("finalScore").innerText = `🌟 最終換算分數為 ${normalized} 分（滿分 100）`;
 
 ['valS','valB','valX','valC','valR'].forEach(id => document.getElementById(id).value = '');
 
