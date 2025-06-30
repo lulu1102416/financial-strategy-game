@@ -391,12 +391,14 @@ function restartGame() {
 
 function saveToLocal() {
   const timestamp = new Date().toLocaleString();
+  const normalized = Math.round(((totalScore + 250) / 500) * 100);
   const record = {
     name: student.name,
     id: student.id,
     total: totalScore,
     logs: logs.map(l => `第${l.round}回合: ${l.cardTitle}（${l.score}分）`).join(" / "),
-    time: timestamp
+    time: timestamp, 
+    final: normalized
   };
   fetch("https://script.google.com/macros/s/AKfycbxOYkovaJzgUHxSV-jhrQnQqB72sDKePEeZpKRrwj9stCmimYG4OlgkwxJfmhBn35Kd/exec", {
     method: "POST",
