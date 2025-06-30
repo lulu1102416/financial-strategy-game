@@ -33,6 +33,9 @@
     <p>請輸入 S/B/X/C/R 加權（整數，總合最多為 10）：</p>
 
 <div>
+  <p>總分：<span id="totalScore">0</span></p>
+<p id="finalScore" style="font-weight: bold; color: green;"></p>
+
   <label>S: 
     <select id="signS"><option value="+">+</option><option value="-">-</option></select>
     <input id="valS" type="number" min="0" max="10" step="1" />
@@ -323,7 +326,8 @@ function startGame() {
   document.getElementById("gameSection").classList.remove("hidden");
   document.getElementById("studentInfo").innerText = `${name}（${id}）`;
   document.getElementById("logList").innerHTML = '';
-  <p id="finalScore" style="font-weight: bold; color: green;"></p>
+ 
+
 
   document.getElementById("totalScore").innerText = '0';
   document.getElementById("result").innerText = '';
