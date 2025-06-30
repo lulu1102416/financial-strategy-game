@@ -400,12 +400,15 @@ function saveToLocal() {
     time: timestamp, 
     final: normalized
   };
-  fetch("(https://script.google.com/macros/s/AKfycbx-2_J0TaZSiCIhOTNvGpwpv--T80PLdB5uMzbenRbc9gy3TKFQtqAbRNPoOKtc4wFs/exec)", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(record)
-  });
+fetch("https://script.google.com/macros/s/AKfycbx-2_J0TaZSiCIhOTNvGpwpv--T80PLdB5uMzbenRbc9gy3TKFQtqAbRNPoOKtc4wFs/exec", {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(record)
+});
+
 }
 </script>
 
