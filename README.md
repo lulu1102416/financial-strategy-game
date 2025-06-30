@@ -383,7 +383,7 @@ if (round >= 5) {
 } else {
   drawCard();
 }
-
+}
 
 function restartGame() {
   location.reload();
