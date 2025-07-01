@@ -400,7 +400,7 @@ function saveToLocal() {
     time: timestamp, 
     final: normalized
   };
-fetch("https://script.google.com/macros/s/AKfycbx-2_J0TaZSiCIhOTNvGpwpv--T80PLdB5uMzbenRbc9gy3TKFQtqAbRNPoOKtc4wFs/exec", {
+fetch("https://script.google.com/macros/s/AKfycbzMy2Weq75_zo54t-w2PdgQEYLgyLak0wzSYtE0PJet1fqR5zsc9JSh5knOPZqtaAYbgw/exec", {
   method: "POST",
   mode: "no-cors",
   headers: {
